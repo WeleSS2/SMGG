@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>gfx/background.hdr</file>
+		<file>gfx/background2.hdr</file>
+    </qresource>
+</RCC>

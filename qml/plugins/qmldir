@@ -1,0 +1,7 @@
+module SMGG2
+linktarget SMGG2Qmlplugin
+optional plugin SMGG2Qmlplugin
+classname SMGG2Plugin
+typeinfo SMGG2Qml.qmltypes
+prefer :/QmlFiles/SMGG2/
+
