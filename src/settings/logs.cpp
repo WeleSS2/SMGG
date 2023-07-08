@@ -5,12 +5,6 @@
 #include <stdio.h>
 #include <cstdlib>
 
-#ifdef _WIN32
-#define APPDATA_DIR() (std::getenv("APPDATA") ? std::getenv("APPDATA") : "")
-#else
-#define APPDATA_DIR() ""
-#endif
-
 Logs::Logs()
 {
 
@@ -39,7 +33,7 @@ int Logs::SaveLog(const std::filesystem::path& file,
 
         std::string defPath = std::string(APPDATA_DIR()) + "/CapibaraStudio/SMGG/Logs";
     #elif __unix__
-        std::string defPath = "/var/log/CapibaraStudio/Logs";
+        std::string defPath = "/var/log/CapibaraStudio/SMGG/Logs";
     #endif
 
     if(!sf::exists(sf::path(defPath)))
@@ -61,7 +55,7 @@ int Logs::SaveLog(const std::filesystem::path& file,
             << function
             << " | Line: "
             << line
-            << " | Log: "
+            << std::endl
             << buffer
             << std::endl
             << "-------------------------------------------------------"

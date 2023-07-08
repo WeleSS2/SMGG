@@ -12,6 +12,8 @@ Item {
     property int cameraAngleX: -75
     property int cameraAngleY: 0
 
+    property double camPosY: freeCamera.position.y / 25000;
+
     ListModel {
         id: starsModel
         ListElement {
@@ -151,10 +153,12 @@ Item {
                 if(freeCamera.position.y > 25)
                 {
                     // Set current quarter to zoom while scrolling in this direction
-                    var xMid = Screen.width / 2
-                    var yMid = Screen.height / 2
+                    var xMid = scwidth_1 * 50
+                    var yMid = scheight_1 * 50
                     var quarter = 0;
-                    mousePos = mapToGlobal(mouse.x, mouse.y);
+
+                    mousePos = this.mapToItem(view3D, mouse.x, mouse.y);
+
                     if(mousePos.x - xMid > 0)
                     {
                         if(mousePos.y - yMid > 0)
@@ -201,10 +205,11 @@ Item {
                         freeCamera.position.y += 75;
                 }
             }
+            camPosY = freeCamera.position.y / 25000;
         }
         onPressed: function(mouse){
             if(mouse.button === Qt.LeftButton){
-                mousePos = mapToGlobal(mouseX, mouseY);
+                mousePos = this.mapToItem(view3D, mouse.x, mouse.y);
                 dragActive = true;
             }
             else if(mouse.button === Qt.RightButton){
@@ -220,17 +225,18 @@ Item {
         onMouseXChanged: function(mouse){
             if(dragActive)
             {
-                mousePosDrag = mapToGlobal(mouseX, mouseY);
-                var offset = cameraAngleY;
-                var angle = offset * Math.PI / 180.0;
+                mousePosDrag = this.mapToItem(view3D, mouse.x, mouse.y);
+
+                var angle = cameraAngleY * Math.PI / 180.0;
+
                 var cosAngle = Math.cos(-angle);
                 var sinAngle = Math.sin(-angle);
-                var dragX = (mousePosDrag.x - mousePos.x) * (freeCamera.position.y / 25000);
-                var dragZ = (mousePosDrag.y - mousePos.y) * (freeCamera.position.y / 25000);
-                var dragx = cosAngle * dragX - sinAngle * dragZ;
-                var dragz = sinAngle * dragX + cosAngle * dragZ;
-                freeCamera.position.x -= dragx;
-                freeCamera.position.z -= dragz;
+
+                var dragX = (mousePosDrag.x - mousePos.x) * (camPosY);
+                var dragZ = (mousePosDrag.y - mousePos.y) * (camPosY);
+
+                freeCamera.position.x -= (cosAngle * dragX - sinAngle * dragZ);
+                freeCamera.position.z -= (sinAngle * dragX + cosAngle * dragZ);
             }
         }
         onReleased: function(mouse){

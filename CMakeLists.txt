@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(tests FALSE)
+set(tests TRUE)
 
 find_package(Qt6 REQUIRED COMPONENTS Gui Core Qml Quick Quick3D)
 

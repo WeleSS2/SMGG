@@ -3,6 +3,12 @@
 #include <iostream>
 #include <filesystem>
 
+#ifdef _WIN32
+#define APPDATA_DIR() (std::getenv("APPDATA") ? std::getenv("APPDATA") : "")
+#else
+#define APPDATA_DIR() ""
+#endif
+
 #define LOG(format, ...) Logs::SaveLog(std::filesystem::path(__FILE__), __func__, __LINE__, format, ##__VA_ARGS__)
 
 class Logs
@@ -28,6 +34,4 @@ private:
      * ERROR Return -1 and proced forward
      */
     static int ClearLogs(const std::filesystem::path& file);
-
-    static std::string logPath;
 };

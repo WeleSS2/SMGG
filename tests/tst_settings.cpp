@@ -6,31 +6,58 @@
 
 using namespace testing;
 
-// Define a fixture class for the test suite
-class SettingsTest : public ::testing::Test {
-protected:
-    Settings settings;
+// Line tests which use one instance of singleton!
+class SettingsLineTest : public ::testing::Test {
+
 };
 
 // Test case for SaveValue function
-TEST_F(SettingsTest, SaveValueTest) {
+TEST_F(SettingsLineTest, SaveValueTest) {
     // Call the SaveValue function with test values
-    EXPECT_TRUE(settings.SaveValue("key1", 10));
-    EXPECT_TRUE(settings.SaveValue("key2", "test"));
+    EXPECT_TRUE(Settings::getSettings()->SaveValue("key1", 10));
+    EXPECT_TRUE(Settings::getSettings()->SaveValue("key2", "test"));
 }
 
 // Test case for LoadValue function
-TEST_F(SettingsTest, LoadValueTest) {
-    // Save some values using SaveValue function
-    settings.SaveValue("key1", 10);
-    settings.SaveValue("key2", "test");
-
+TEST_F(SettingsLineTest, LoadValueTest) {
     // Call the LoadValue function to retrieve the saved values
-    const int* intValue = settings.LoadValue<int>("key1");
+    const int* intValue = Settings::getSettings()->LoadValue<int>("key1");
     EXPECT_NE(intValue, nullptr);
     EXPECT_EQ(*intValue, 10);
 
-    const QString* stringValue = settings.LoadValue<QString>("key2");
+    const QString* stringValue = Settings::getSettings()->LoadValue<QString>("key2");
     EXPECT_NE(stringValue, nullptr);
     EXPECT_EQ(*stringValue, "test");
+}
+
+/* Test creating a file and saving value into.
+ *  Initialization for settings path;
+ */
+TEST_F(SettingsLineTest, SaveToFileTest) {
+
+    Settings::getSettings()->CheckPath();
+
+    QString path = Settings::getSettings()->defaultPath() + "/test.json";
+
+    int value = Settings::getSettings()->SaveSettingsToFiles(path);
+
+    EXPECT_EQ(value, 0);
+}
+
+// Test loading from files
+TEST_F(SettingsLineTest, LoadFromFilesTest) {
+    QString path = Settings::getSettings()->defaultPath() + "/test.json";
+
+    int value = Settings::getSettings()->LoadSettings(path);
+
+    // Call the LoadValue function to retrieve the saved values
+    const int* intValue = Settings::getSettings()->LoadValue<int>("key1");
+    EXPECT_NE(intValue, nullptr);
+    EXPECT_EQ(*intValue, 10);
+
+    const QString* stringValue = Settings::getSettings()->LoadValue<QString>("key2");
+    EXPECT_NE(stringValue, nullptr);
+    EXPECT_EQ(*stringValue, "test");
+
+    EXPECT_EQ(value, 0);
 }

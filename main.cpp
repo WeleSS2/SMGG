@@ -1,4 +1,4 @@
-#undef TESTS
+#define TESTS
 
 #ifdef TESTS
     #include <gtest/gtest.h>
@@ -10,16 +10,23 @@
 
     #include "src/settings/settingsoperations.h"
 
-
-Settings objSettings;
-
-
-void settingsSaved()
+bool AppUp()
 {
-    objSettings.SaveValue("testR", 25);
+    return true;
 }
 
+bool AppDown()
+{
+    if(CheckPath())
+        Settings::getSettings()->SaveSettingsToFiles(Settings::getSettings()->defaultPath() + "/settings.json");
+    else
+        return false;
+
+
+    return true;
+}
 #endif
+
 
 int main(int argc, char *argv[])
 {
@@ -37,17 +44,24 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/QmlFiles");
 
 
+    /*
     QString test1 = "test";
     QPair<QString, int> pos2d = {"test", 5};
     QPair<QString, QString> test2 = {"test2", "Kolomans to menda"};
-    if(objSettings.SaveValue(pos2d.first, pos2d.second))
+    if(Settings::getSettings()->SaveValue(pos2d.first, pos2d.second))
         std::cout << "1 Saved" << std::endl;
-    if(objSettings.SaveValue(test2.first, test2.second))
+    if(Settings::getSettings()->SaveValue(test2.first, test2.second))
         std::cout << "2 Saved" << std::endl;
 
-    settingsSaved();
+    std::cout << (*Settings::getSettings()->LoadValue<QString>("test2")).toStdString() << std::endl;
 
-    std::cout << *objSettings.LoadValue<int>("testR") << std::endl;
+    Settings::getSettings()->SaveSettingsToFiles();
+
+
+    Settings::getSettings()->LoadSettings();
+
+    std::cout << *Settings::getSettings()->LoadValue<int>("test") << std::endl;
+    */
 
     const QUrl url(u"qrc:/QmlFiles/SMGG2Q/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -57,6 +71,7 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
     engine.load(url);
+
     return app.exec();
 #endif
 }

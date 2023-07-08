@@ -2,16 +2,10 @@
 
 // Qt Libs
 #include <QObject>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QJsonValue>
-#include <QJsonObject>
 
 // Def Libs
 #include <unordered_map>
 #include <variant>
-#include <iostream>
-#include <filesystem>
 
 #include "logs.h"
 
@@ -19,69 +13,75 @@
 class Settings
 {
 public:
-    Settings();
+    // Get singleton instance
+    static Settings* getSettings()
+    {
+        static Settings instance;
+        return &instance;
+    }
 
     // Save value into memory
     template <typename T>
-    bool SaveValue(const QString& key, T value);
+    int SaveValue(const QString& key, T value);
 
     // Load selected value from memory
     template <typename T>
     const T* LoadValue(const QString& key);
 
-    // Load default settings on app startup
-    bool LoadSettingsStartup();
+    // Check settings path
+    bool CheckPath();
 
-protected:
+    // Load settings from json file
+    int LoadSettings(QString& path);
+
     // Save settings into files
-    bool SaveSettingsToFiles();
+    int SaveSettingsToFiles(QString& path);
+
+    // Reset all settings which have default value to this default value
+    int ResetSettings();
+
+    // Clear up for tests
+    void ClearData(){ keyMap.clear(); };
+
+    // Get default path
+    QString& defaultPath();
 
 private:
-    // Navigate and check did folders and files exist
-    bool CheckFileParents(const QString& fileName);
+    // Singleton things
+    Settings();
 
-    // Try to open .json file with selected name
-    bool OpenJson(const QString& fileName);
-
-    // Path where are settings, AppData or Linux destination
-    QString settingsPath = "";
+    Settings(const Settings&) = delete;
+    Settings& operator=(const Settings&) = delete;
 
     // Variant with all values possible to save, if do you want to save something else add it!
-    template<typename T>
-    using KeyMap = std::unordered_map<QString, std::variant<QString, int>>;
+    std::unordered_map<QString, std::variant<
+    QString,
+    int
+    >> keyMap;
 
-    // Pointer to map
-    KeyMap<void*> keyMap;
+    // Path for settings
+
+    QString settingsPath = "";
 };
 
 template <typename T>
-bool Settings::SaveValue(const QString& key, T value) {
+int Settings::SaveValue(const QString& key, T value) {
 
     keyMap[key] = value;
-    return true;
+    return 1;
 }
 
 template <typename T>
 const T* Settings::LoadValue(const QString& name) {
     if (keyMap.count(name) > 0) {
-        try {
-            return std::get_if<T>(&keyMap[name]);
-        } catch (const std::bad_variant_access& ex) {
-            LOG("S-001: ERROR: failed to access value for key '"
-                          + name.toStdString()
-                          + "'. Reason: "
-                          + ex.what()
-                          );
-            return nullptr;
-        }
-    } else {
-        LOG(std::string(__FILE__)
-                      + " "
-                      + std::to_string(__LINE__)
-                      + "Warn: Key '"
-                      + name.toStdString()
-                      + "' does not exist."
-                      );
+        return reinterpret_cast<const T*>(&keyMap[name]);
+    }
+    else
+    {
+        LOG("Warn: Key '"
+            + name.toStdString()
+            + "' does not exist."
+            );
     }
 
     return nullptr;

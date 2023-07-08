@@ -6,12 +6,16 @@ import DDDmap
 import Gui
 
 Window {
-    property int scwidth_1: Screen.width / 100
-    property int scheight_1: Screen.height / 100
+    property int scwidth_1: 0
+    property int scheight_1: 0
+
     id: qmlMainWindow
+
     visibility: Window.FullScreen
     visible: true
+
     title: "SPS Tools"
+
     property color colorButtonBackground: "#D3060606"
     property color colorButtonBorder: "#FBDFDFDF"
     property color colorText: "#FBDFDFDF"
@@ -135,4 +139,9 @@ Window {
         }
         onClicked: Qt.quit()
     }
+
+    Component.onCompleted: {
+            scwidth_1 = qmlMainWindow.width / 100
+            scheight_1 = qmlMainWindow.height / 100
+        }
 }
