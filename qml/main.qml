@@ -137,7 +137,7 @@ Window {
             font.bold: true
             font.pixelSize: 20
         }
-        onClicked: Qt.quit()
+        onClicked: C_Application.appDown()
     }
 
     Component.onCompleted: {

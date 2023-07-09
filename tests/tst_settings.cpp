@@ -2,7 +2,7 @@
 #include <gmock/gmock-matchers.h>
 #include <QObject>
 
-#include "../src/settings/settingsoperations.h"
+#include "../src/settings/settings.h"
 
 using namespace testing;
 

@@ -9,6 +9,15 @@ class SettingsInterface : public QObject
 public:
     explicit SettingsInterface(QObject *parent = nullptr);
 
+public slots:
+    QString getStringValue(const QString &key);
+
+    int getIntValue(const QString& key);
+
+    double getDoubleValue(const QString &key);
+
+    bool saveValue(const QString &key, const QVariant& value, const QString& type);
+
 signals:
 
 };

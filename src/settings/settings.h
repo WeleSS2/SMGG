@@ -56,7 +56,8 @@ private:
     // Variant with all values possible to save, if do you want to save something else add it!
     std::unordered_map<QString, std::variant<
     QString,
-    int
+    int,
+    double
     >> keyMap;
 
     // Path for settings

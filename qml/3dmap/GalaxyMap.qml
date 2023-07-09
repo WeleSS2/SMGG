@@ -11,6 +11,7 @@ Item {
     property bool gridVisible: true
     property int cameraAngleX: -75
     property int cameraAngleY: 0
+    property int value: C_Settings.getIntValue("test")
 
     property double camPosY: freeCamera.position.y / 25000;
 
@@ -112,6 +113,7 @@ Item {
             id: qmlGrid
             visible: gridVisible
             position: Qt.vector3d(0, -50, 0)
+                                  //C_Settings.GetIntValue("globalGridZ") != 0 ? C_Settings.GetIntValue("globalGridZ") : -50, 0)
             scale: Qt.vector3d(2050, 2050, 0)
             eulerRotation.x: 90
             geometry: GridGeometry {
@@ -211,6 +213,7 @@ Item {
             if(mouse.button === Qt.LeftButton){
                 mousePos = this.mapToItem(view3D, mouse.x, mouse.y);
                 dragActive = true;
+                console.log("Value is ", value);
             }
             else if(mouse.button === Qt.RightButton){
                 console.log("Right");
@@ -229,7 +232,7 @@ Item {
 
                 var angle = cameraAngleY * Math.PI / 180.0;
 
-                var cosAngle = Math.cos(-angle);
+                var cosAngle = Math.cos(angle);
                 var sinAngle = Math.sin(-angle);
 
                 var dragX = (mousePosDrag.x - mousePos.x) * (camPosY);

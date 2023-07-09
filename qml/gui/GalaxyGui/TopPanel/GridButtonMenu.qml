@@ -55,7 +55,8 @@ Rectangle {
                             height: parent.height
                             color: "#EE999999"
                             font.pixelSize: 20
-                            text: "0000" // Set later to variable (Resolve negative values)
+                            // Set later to variable (Resolve negative values)
+                            text: "0000"
                             inputMask: "0000;"
                         }
                     }
@@ -98,7 +99,8 @@ Rectangle {
                             height: parent.height
                             color: "#EE999999"
                             font.pixelSize: 20
-                            text: "000" // Finish translation and set to variable
+                            // Set later to variable (Resolve negative values)
+                            text: "000"
                             inputMask: "000;"
                         }
                     }
@@ -141,7 +143,8 @@ Rectangle {
                             height: parent.height
                             color: "#EE999999"
                             font.pixelSize: 20
-                            text: "20" // Set later to variable
+                            // Set later to variable (Resolve negative values)
+                            text: "20"
                             inputMask: "00"
                         }
                     }

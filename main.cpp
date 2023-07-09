@@ -1,4 +1,5 @@
-#define TESTS
+#include "qqmlcontext.h"
+#undef TESTS
 
 #ifdef TESTS
     #include <gtest/gtest.h>
@@ -8,19 +9,14 @@
     #include <QDir>
     #include <iostream>
 
-    #include "src/settings/settingsoperations.h"
+    #include "src/settings/settings.h"
+    //#include <QQmlContext>
+    //#include "src/settings/settingsinterface.h"
+    #include "src/qinterfaces.h"
+
 
 bool AppUp()
 {
-    return true;
-}
-
-bool AppDown()
-{
-    if(CheckPath())
-        Settings::getSettings()->SaveSettingsToFiles(Settings::getSettings()->defaultPath() + "/settings.json");
-    else
-        return false;
 
 
     return true;
@@ -43,25 +39,12 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/WelcomeMenu");
     engine.addImportPath(":/QmlFiles");
 
+    QCoreApplication::setApplicationVersion("v0.0.1");
 
-    /*
-    QString test1 = "test";
-    QPair<QString, int> pos2d = {"test", 5};
-    QPair<QString, QString> test2 = {"test2", "Kolomans to menda"};
-    if(Settings::getSettings()->SaveValue(pos2d.first, pos2d.second))
-        std::cout << "1 Saved" << std::endl;
-    if(Settings::getSettings()->SaveValue(test2.first, test2.second))
-        std::cout << "2 Saved" << std::endl;
+    QInterfaces qmlInterface(nullptr, &engine);
+    qmlInterface.BuildAll();
 
-    std::cout << (*Settings::getSettings()->LoadValue<QString>("test2")).toStdString() << std::endl;
-
-    Settings::getSettings()->SaveSettingsToFiles();
-
-
-    Settings::getSettings()->LoadSettings();
-
-    std::cout << *Settings::getSettings()->LoadValue<int>("test") << std::endl;
-    */
+    Settings::getSettings()->SaveValue<int>("test", -200);
 
     const QUrl url(u"qrc:/QmlFiles/SMGG2Q/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

@@ -1,4 +1,4 @@
-#include "settingsoperations.h"
+#include "settings.h"
 
 
 #include <QJsonDocument>
@@ -6,9 +6,6 @@
 #include <QJsonValue>
 #include <QJsonObject>
 #include <QFile>
-
-// My libs + files
-#include "applicationactions.h"
 
 Settings::Settings()
 {
