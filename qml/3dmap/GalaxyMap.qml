@@ -10,6 +10,9 @@ Item {
     focus: false
     property bool gridVisible: true
     property int zGalaxyGridPos: C_Settings.getValue("zGalaxyGridPos", "int") ?? -50
+    property int gridValue: C_Settings.getValue("galaxyGridLines", "int") ?? 50
+    property double gridStep: ((1000 / gridValue) / 9.75)
+
     property int cameraAngleX: -75
     property int cameraAngleY: 0
 
@@ -103,21 +106,22 @@ Item {
         }
 
         DirectionalLight {
-            brightness: 0.6
+            brightness: 0.7
             color: Qt.rgba(1, 1, 1, 1.0)
             ambientColor: Qt.rgba(0.1, 0.1, 0.1, 1.0)
             eulerRotation.x: freeCamera.eulerRotation.x
         }
-
         Model {
             id: qmlGrid
             visible: gridVisible
             position: Qt.vector3d(0, zGalaxyGridPos, 0)
-            scale: Qt.vector3d(2050, 2050, 0)
+            scale: Qt.vector3d(100, 100, 0)
             eulerRotation.x: 90
             geometry: GridGeometry {
-                horizontalLines: 50
-                verticalLines: 50
+                horizontalLines: (gridValue + 1) ?? 50
+                horizontalStep: gridStep
+                verticalLines: (gridValue + 1) ?? 50
+                verticalStep: gridStep
             }
             materials: [ DefaultMaterial {
                     diffuseColor: "#FF333333"

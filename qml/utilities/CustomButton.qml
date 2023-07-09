@@ -5,8 +5,11 @@ Button {
     id: customButton
     property alias bBackground: customButtonBackground
     property alias bImage: customButtonImage
-    property bool bHover: true
     property alias bText: customButtonText
+    property bool bHover: true
+    property bool bHoverHighlight: true
+    property bool bBorder: true
+    property int bBorderWidth: 1
     property string bDesc: ""
 
     property color rectangleColor: "#C3111111"
@@ -22,7 +25,7 @@ Button {
             id: customButtonBackground
             anchors.fill: parent
             color: rectangleColor
-            border.width: 1
+            border.width: bBorder === true ? bBorderWidth : 0
             border.color: rectangleBorder
         }
         Image {
@@ -37,7 +40,7 @@ Button {
             enabled: parent.enabled
             color: "#2DFFFFFF"
             radius: customButtonBackground.radius
-            visible: buttonIsHovered
+            visible: buttonIsHovered && bHoverHighlight
         }
         MouseArea {
             id: buttonHovered
