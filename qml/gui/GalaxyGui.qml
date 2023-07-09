@@ -6,6 +6,7 @@ import Utilities
 
 Item {
     signal closeAllOpenMenu()
+
     LeftMainPanel {
         id: qmlLeftMainPanel
         visible: true

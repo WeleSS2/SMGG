@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import Utilities
 
 Rectangle {
+    id: gridButtonMenu
     x: parent.x
     y: parent.y + parent.height + 10
     width: 300
@@ -18,6 +19,7 @@ Rectangle {
         target: qmlMainGui
         function onCloseAllOpenMenu() {
             hide();
+            qmlMainWindow.switchFocus();
         }
     }
     property int elementWidth: this.width
@@ -27,6 +29,7 @@ Rectangle {
         x: 10
         y: 5
         Rectangle {
+            id: zGalaxyGridPos
             Layout.alignment: Qt.AlignLeft
             Layout.preferredWidth: elementWidth
             Layout.preferredHeight: elementHeight
@@ -50,22 +53,22 @@ Rectangle {
                         border.color: "#EE999999"
                         border.width: 1
                         TextInput {
+                            id: test1
                             x: 3
                             width: parent.width - 5
                             height: parent.height
                             color: "#EE999999"
                             font.pixelSize: 20
                             // Set later to variable (Resolve negative values)
-                            text: "0000"
-                            inputMask: "0000;"
+                            text: C_Settings.getValue("zGalaxyGridPos", "int") ?? "0000"
+                            inputMask: "####;"
+                            focus: gridButtonMenu.focus
+                            onTextChanged:
+                            {
+                                qmlMainMap.zGalaxyGridPos = this.text * 1;
+                                C_Settings.saveValue("zGalaxyGridPos", this.text, "int")
+                            }
                         }
-                    }
-                    CustomButton {
-                        x: 55
-                        width: 40
-                        height: 30
-                        bText.text: "Ok"
-                        bBackground.radius: 10
                     }
                 }
             }
@@ -102,6 +105,7 @@ Rectangle {
                             // Set later to variable (Resolve negative values)
                             text: "000"
                             inputMask: "000;"
+                            focus: gridButtonMenu.focus
                         }
                     }
                     CustomButton {
@@ -146,6 +150,7 @@ Rectangle {
                             // Set later to variable (Resolve negative values)
                             text: "20"
                             inputMask: "00"
+                            focus: gridButtonMenu.focus
                         }
                     }
                     CustomButton {

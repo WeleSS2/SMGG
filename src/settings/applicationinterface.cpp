@@ -1,4 +1,5 @@
 #include "applicationinterface.h"
+#include "application.h"
 #include "settings.h"
 
 #include <QCoreApplication>
@@ -11,21 +12,16 @@ ApplicationInterface::ApplicationInterface(QObject *parent)
 
 bool ApplicationInterface::appUp()
 {
-    return true;
+    if(Application::appUp())
+        return true;
+    else
+        return false;
 }
 
 bool ApplicationInterface::appDown()
 {
-    if(Settings::getSettings()->CheckPath())
-    {
-        QString path = Settings::getSettings()->defaultPath() + "/settings.json";
-
-        Settings::getSettings()->SaveSettingsToFiles(path);
-    }
+    if(Application::appDown())
+        return true;
     else
         return false;
-
-    QCoreApplication::quit();
-
-    return true;
 }

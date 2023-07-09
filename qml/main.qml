@@ -91,7 +91,6 @@ Window {
             font.bold: true
             font.pixelSize: 20
         }
-        // onClicked:
     }
 
     Button {
@@ -137,6 +136,7 @@ Window {
             font.bold: true
             font.pixelSize: 20
         }
+
         onClicked: C_Application.appDown()
     }
 
@@ -144,4 +144,19 @@ Window {
             scwidth_1 = qmlMainWindow.width / 100
             scheight_1 = qmlMainWindow.height / 100
         }
+
+    function switchFocus() {
+        if(qmlMainMap.visible === true)
+        {
+           qmlMainMap.focus = true;
+        }
+        else if(qmlSystemMap.visible === true)
+        {
+            qmlSystemMap.focus = true;
+        }
+        else
+        {
+
+        }
+    }
 }

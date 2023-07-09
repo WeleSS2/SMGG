@@ -42,8 +42,15 @@ int Logs::SaveLog(const std::filesystem::path& file,
     }
 
     defPath += "/" + file.filename().generic_string();
-    defPath.replace(defPath.length() - 3, 3, "log");
-
+    if(file.filename().extension() == ".h")
+    {
+        defPath.erase(defPath.length() - 1, 1);
+        defPath.append("log");
+    }
+    else if (file.filename().extension() == ".cpp")
+    {
+        defPath.replace(defPath.length() - 3, 3, "log");
+    }
     std::fstream out(defPath, std::ios_base::out | std::ios_base::app);
 
     if(out.is_open())

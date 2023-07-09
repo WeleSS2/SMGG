@@ -13,14 +13,7 @@
     //#include <QQmlContext>
     //#include "src/settings/settingsinterface.h"
     #include "src/qinterfaces.h"
-
-
-bool AppUp()
-{
-
-
-    return true;
-}
+    #include "src/settings/application.h"
 #endif
 
 
@@ -40,6 +33,8 @@ int main(int argc, char *argv[])
     engine.addImportPath(":/QmlFiles");
 
     QCoreApplication::setApplicationVersion("v0.0.1");
+
+    Application::appUp();
 
     QInterfaces qmlInterface(nullptr, &engine);
     qmlInterface.BuildAll();

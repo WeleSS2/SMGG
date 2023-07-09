@@ -9,19 +9,34 @@ SettingsInterface::SettingsInterface(QObject *parent)
 
 }
 
-QString SettingsInterface::getStringValue(const QString &key)
+QVariant SettingsInterface::getValue(const QString &key, const QString &type)
 {
-    return *Settings::getSettings()->LoadValue<QString>(key);
-}
+    if(type == "int")
+    {
+        if(Settings::getSettings()->LoadValue<int>(key) != nullptr)
+        {
+            return QVariant::fromValue(*Settings::getSettings()->LoadValue<int>(key));
+        }
+    }
+    else if(type == "string")
+    {
+        if(Settings::getSettings()->LoadValue<QString>(key) != nullptr)
+        {
+            return QVariant::fromValue(*Settings::getSettings()->LoadValue<QString>(key));
+        }
+    }
+    else if (type == "double")
+    {
+        if(Settings::getSettings()->LoadValue<double>(key) != nullptr)
+        {
+            return QVariant::fromValue(*Settings::getSettings()->LoadValue<double>(key));
+        }
+    }
 
-int SettingsInterface::getIntValue(const QString& key)
-{
-    return *Settings::getSettings()->LoadValue<int>(key);
-}
+    LOG("Undefined type: ", type.toStdString().c_str(), " for value.");
 
-double SettingsInterface::getDoubleValue(const QString &key)
-{
-    return *Settings::getSettings()->LoadValue<double>(key);
+    return QVariant();
+
 }
 
 bool SettingsInterface::saveValue(const QString &key, const QVariant &value, const QString &type)

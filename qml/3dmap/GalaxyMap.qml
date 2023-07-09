@@ -9,9 +9,9 @@ Item {
     anchors.fill: parent
     focus: false
     property bool gridVisible: true
+    property int zGalaxyGridPos: C_Settings.getValue("zGalaxyGridPos", "int") ?? -50
     property int cameraAngleX: -75
     property int cameraAngleY: 0
-    property int value: C_Settings.getIntValue("test")
 
     property double camPosY: freeCamera.position.y / 25000;
 
@@ -112,8 +112,7 @@ Item {
         Model {
             id: qmlGrid
             visible: gridVisible
-            position: Qt.vector3d(0, -50, 0)
-                                  //C_Settings.GetIntValue("globalGridZ") != 0 ? C_Settings.GetIntValue("globalGridZ") : -50, 0)
+            position: Qt.vector3d(0, zGalaxyGridPos, 0)
             scale: Qt.vector3d(2050, 2050, 0)
             eulerRotation.x: 90
             geometry: GridGeometry {
@@ -157,32 +156,19 @@ Item {
                     // Set current quarter to zoom while scrolling in this direction
                     var xMid = scwidth_1 * 50
                     var yMid = scheight_1 * 50
-                    var quarter = 0;
 
                     mousePos = this.mapToItem(view3D, mouse.x, mouse.y);
 
-                    if(mousePos.x - xMid > 0)
-                    {
-                        if(mousePos.y - yMid > 0)
-                        {
-                            quarter = 1;
-                        }
-                        else
+                    var angle = cameraAngleY * Math.PI / 180.0;
 
-                            quarter = 4;
-                    }
-                    else
-                    {
-                        if(mousePos.y - yMid > 0)
-                        {
-                            quarter = 2;
-                        }
-                        else
-                            quarter = 3;
-                    }
-                    // Direction movement for camera
-                    freeCamera.position.x += ((mousePos.x - xMid) * (freeCamera.position.y / 7500));
-                    freeCamera.position.z += ((mousePos.y - yMid) * (freeCamera.position.y / 7500));
+                    var cosAngle = Math.cos(angle);
+                    var sinAngle = Math.sin(-angle);
+
+                    var dragX = (xMid - mousePos.x) * (freeCamera.position.y / 7500);
+                    var dragZ = (yMid - mousePos.y) * (freeCamera.position.y / 7500);
+
+                    freeCamera.position.x -= (cosAngle * dragX - sinAngle * dragZ);
+                    freeCamera.position.z -= (sinAngle * dragX + cosAngle * dragZ);
 
                     // Zoom
                     if(freeCamera.position.y > 1500){
@@ -213,7 +199,6 @@ Item {
             if(mouse.button === Qt.LeftButton){
                 mousePos = this.mapToItem(view3D, mouse.x, mouse.y);
                 dragActive = true;
-                console.log("Value is ", value);
             }
             else if(mouse.button === Qt.RightButton){
                 console.log("Right");

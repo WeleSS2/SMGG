@@ -75,8 +75,6 @@ int Settings::LoadSettings(QString& path)
                 const QString& key = it.key();
                 const QJsonValue& jsonValue = it.value();
 
-                std::cout << key.toStdString() << "    " << jsonValue.toString().toStdString() << std::endl;
-
                 // Check the type of the JSON value
                 if (jsonValue.isString())
                 {
