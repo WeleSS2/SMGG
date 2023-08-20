@@ -19,6 +19,7 @@ Window {
     property color colorButtonBackground: "#D3060606"
     property color colorButtonBorder: "#FBDFDFDF"
     property color colorText: "#FBDFDFDF"
+
     WelcomeMenu {
         id: qmlWelcomeMenu
         visible: true

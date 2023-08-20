@@ -9,14 +9,37 @@ const QString Galaxy::getElementName(){
     return "Galaxy";
 }
 
-const GalaxyData* Galaxy::getGalaxyData(){
-    return &_galaxyData;
+const GalaxyData *Galaxy::getGalaxyData()
+{
+    return &_GalaxyData;
 }
 
-void moveTo(QVector3D coordinates){
+const QVector<System> *Galaxy::getSystems()
+{
+    return &_Systems;
+}
+
+QVector<System> *Galaxy::editSystems()
+{
+    return &_Systems;
+}
+
+QGalaxy::QGalaxy(QObject *parent)
+{
 
 }
 
-GalaxyData* Galaxy::unsafeGetGalaxyData(){
-    return &_galaxyData;
+int QGalaxy::addSystem(QVector3D systemPos)
+{
+    return 0;
+}
+
+int QGalaxy::editSystem(int systemId)
+{
+    return 0;
+}
+
+int QGalaxy::removeSystem(int systemId)
+{
+    return 0;
 }

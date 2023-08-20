@@ -5,7 +5,7 @@ import "GalaxyGui/TopPanel"
 import Utilities
 
 Item {
-    signal closeAllOpenMenu()
+    signal closeAllTabs()
 
     LeftMainPanel {
         id: qmlLeftMainPanel

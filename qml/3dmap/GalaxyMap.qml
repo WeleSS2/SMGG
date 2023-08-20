@@ -3,7 +3,11 @@ import QtQuick3D
 import QtQuick.Controls
 import QtQuick.Window
 import QtQuick3D.Helpers
+import Qt3D.Core
+//import Qt3D.Render
+import Qt3D.Extras
 
+import "models"
 
 Item {
     anchors.fill: parent
@@ -12,54 +16,35 @@ Item {
     property int zGalaxyGridPos: C_Settings.getValue("zGalaxyGridPos", "int") ?? -50
     property int gridValue: C_Settings.getValue("galaxyGridLines", "int") ?? 50
     property double gridStep: ((1000 / gridValue) / 9.75)
+    property int test: 0
 
-    property int cameraAngleX: -75
-    property int cameraAngleY: 0
+    property double cameraAngleX: -45
+    property double cameraAngleY: 0
 
     property double camPosY: freeCamera.position.y / 25000;
 
+    property alias addStar: modell1
+
     ListModel {
-        id: starsModel
+        id: modell1
         ListElement {
             posX: 0
-            posY: 0
+            posY: 110
             posZ: 0
         }
-
         ListElement {
             posX: 0
-            posY: -50
+            posY: 220
             posZ: 0
         }
+    }
 
+    ListModel {
+        id: starsModel2
         ListElement {
-            posX: 0
-            posY: 50
+            posX: 200
+            posY: 0
             posZ: 0
-        }
-
-        ListElement {
-            posX: 0
-            posY: 0
-            posZ: 80
-        }
-
-        ListElement {
-            posX: 0
-            posY: 0
-            posZ: 100
-        }
-
-        ListElement {
-            posX: 0
-            posY: 0
-            posZ: 2000
-        }
-
-        ListElement {
-            posX: 0
-            posY: 0
-            posZ: 5000
         }
     }
 
@@ -93,7 +78,7 @@ Item {
 
         PerspectiveCamera {
             id: freeCamera
-            position: Qt.vector3d(0, 2000, 300)
+            position: Qt.vector3d(0, 2000, 5000)
             clipFar: 15000
             eulerRotation: Qt.vector3d(cameraAngleX, cameraAngleY, 0)
         }
@@ -109,7 +94,7 @@ Item {
             brightness: 0.7
             color: Qt.rgba(1, 1, 1, 1.0)
             ambientColor: Qt.rgba(0.1, 0.1, 0.1, 1.0)
-            eulerRotation.x: freeCamera.eulerRotation.x
+            eulerRotation: Qt.vector3d(cameraAngleX, cameraAngleY, 0)
         }
         Model {
             id: qmlGrid
@@ -130,23 +115,35 @@ Item {
         }
 
         Repeater3D {
-            model: starsModel
-            delegate: starsDelegate
+            model: [modell1, starsModel2]
+            Repeater3D {
+                model: modell1
+                delegate: starsDelegate
+            }
         }
     }
 
     Keys.onPressed: function(event) {
-        if (event.key === Qt.Key_W) {
-            cameraAngleX += 1;
-        } else if (event.key === Qt.Key_S) {
-            cameraAngleX -= 1;
-        } else if (event.key === Qt.Key_A) {
-            cameraAngleY += 1;
-        } else if (event.key === Qt.Key_D) {
-            cameraAngleY -= 1;
+        if (event.key === Qt.Key_A)
+        {
+            cameraAngleY++;
+        }
+        if (event.key === Qt.Key_D)
+        {
+            cameraAngleY--;
+        }
+        if (event.key === Qt.Key_W)
+        {
+            cameraAngleX++;
+        }
+        if (event.key === Qt.Key_S)
+        {
+            cameraAngleX--;
         }
     }
+
     property bool dragActive: false
+    property int count: 0
     property point mousePos
     property point mousePosDrag
     MouseArea {

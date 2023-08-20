@@ -12,7 +12,7 @@ Button {
     property int bBorderWidth: 1
     property string bDesc: ""
 
-    property color rectangleColor: "#C3111111"
+    property color rectangleColor: "#F1111111"
     property color rectangleBorder: "#FF777777"
     property color mainTextColor: "#EE999999"
 

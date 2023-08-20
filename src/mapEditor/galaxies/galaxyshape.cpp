@@ -1,56 +1,80 @@
 #include "galaxyshape.h"
+#include "../system/system.h"
 
 GalaxyShape::GalaxyShape()
 {
 
 }
-/*
-unsigned char* LoadBMP( const char* FileName, int* OutWidth, int* OutHeight )
+
+GalaxySpiral::GalaxySpiral()
 {
-    sBMPHeader Header;
 
-    std::ifstream File( FileName, std::ifstream::binary );
-
-    File.read( (char*)&Header, sizeof( Header ) );
-
-    *OutWidth  = Header.biWidth;
-    *OutHeight = Header.biHeight;
-
-    const size_t DataSize = 3 * Header.biWidth * Header.biHeight;
-
-    unsigned char* Img = new unsigned char[ DataSize ];
-
-    File.read( (char*)Img, DataSize );
-
-    return Img;
 }
 
-void loadDensityMapFromFile( const char* FileName )
+std::shared_ptr<Galaxy> GalaxySpiral::generate()
 {
-    std::cout << "Loading density map " << FileName << std::endl;
+    auto galaxy = std::make_shared<Galaxy>();
 
-    int W, H;
-    unsigned char* Data = LoadBMP( FileName, &W, &H );
+    return galaxy;
+}
 
-    std::cout << "Loaded ( " << W << " x " << H << " ) " << std::endl;
+GalaxyElipse::GalaxyElipse()
+{
 
-    if ( W != kImageSize || H != kImageSize )
-    {
-        std::cout << "ERROR: density map should be " << kImageSize << " x " << kImageSize << std::endl;
+}
 
-        exit( 255 );
+std::shared_ptr<Galaxy> GalaxyElipse::generate()
+{
+    auto galaxy = std::make_shared<Galaxy>();
+
+    const int numStars = 1000;
+    const double majorAxis = 500.0;
+    const double minorAxis = 250.0; // Assuming a 2:1 ratio for ellipse dimensions
+    const double starRange = 8.0;
+    const double maxStarRange = starRange * 1.5; // Adjust this to control the amount of randomness
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> angleDist(0.0, 2 * M_PI);
+    std::uniform_real_distribution<> radiusDist(0.0, std::sqrt(M_PI * majorAxis * minorAxis / numStars));
+    std::uniform_real_distribution<> zDist(-5, 5);
+
+    // Generate stars
+    for (int i = 0; i < numStars; ++i) {
+        double angle = angleDist(gen);
+        double radius = radiusDist(gen);
+
+        double x = radius * std::cos(angle);
+        double y = minorAxis / majorAxis * radius * std::sin(angle);
+        double z = zDist(gen);
+
+        // Add some randomness to the positions
+        x += std::uniform_real_distribution<>(-maxStarRange, maxStarRange)(gen);
+        y += std::uniform_real_distribution<>(-maxStarRange, maxStarRange)(gen);
+        z += std::uniform_real_distribution<>(-maxStarRange, maxStarRange)(gen);
+
+        std::shared_ptr<SystemData> _systemData = std::make_shared<SystemData>();
+
+        _systemData->position  = {static_cast<float>(x), static_cast<float>(y), static_cast<float>(z)};
+
+        System _system;
+
+        _system.setSystemData(_systemData);
+
+        galaxy->editSystems()->emplaceBack(_system);
     }
 
-    g_DensityMap = new float[ W * H ];
+    return galaxy;
+}
 
-    for ( int y = 0; y != H; y++ )
-    {
-        for ( int x = 0; x != W; x++ )
-        {
-            g_DensityMap[ x + y * W ] = float( Data[ 3 * (x + y * W) ] ) / 255.0f;
-        }
-    }
+GalaxyIrregular::GalaxyIrregular()
+{
 
-    delete[]( Data );
-}*/
+}
 
+std::shared_ptr<Galaxy> GalaxyIrregular::generate()
+{
+    auto galaxy = std::make_shared<Galaxy>();
+
+    return galaxy;
+}

@@ -6,7 +6,7 @@ import Utilities
 
 Item {
     x: qmlMainWindow.scheight_1 * 8
-    width: qmlMainWindow.scwidth_1 * 80
+    width: qmlMainWindow.scwidth_1 * 20
     height: 60
 
     property int buttonHeight: 40
@@ -42,7 +42,7 @@ Item {
                         }
                         else if (mouse.button === Qt.RightButton){
                             if(qmlGridButtonMenu.visible){
-                                qmlMainGui.closeAllOpenMenu();
+                                qmlMainGui.closeAllTabs();
                             }
                             else
                                 qmlGridButtonMenu.visible = true;
@@ -52,7 +52,7 @@ Item {
                 GridButtonMenu {
                     id: qmlGridButtonMenu
                 }
-                bDesc: "Left click to disable/enable grid
+                bDesc: qmlGridButtonMenu.visible ? "" : "Left click to disable/enable grid
 Right click to open/close options"
             }
             CustomButton {

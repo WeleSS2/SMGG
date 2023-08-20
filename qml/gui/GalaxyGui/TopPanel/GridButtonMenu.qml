@@ -17,7 +17,7 @@ Rectangle {
     visible: false
     Connections {
         target: qmlMainGui
-        function onCloseAllOpenMenu() {
+        function onCloseAllTabs() {
             hide();
             qmlMainWindow.switchFocus();
         }

@@ -3,9 +3,9 @@
 #include <QVector3D>
 #include <QList>
 #include <QtQuick3D>
+#include <QAbstractListModel>
 
-#include "planet.h"
-#include "../gameelement.h"
+#include "systemobject.h"
 
 // Data for hyperlane
 struct Hyperlane{
@@ -40,16 +40,12 @@ struct SystemData{
 
     // Data for hyperlanes in this system
     QVector<Hyperlane> hyperlanes;
-
-    // Planets in this system
-    QVector<PlanetData> planets;
 };
 
 
 // Main class for every single system
-class System : public GameElement
+class System : public SystemObject
 {
-
 public:
     System();
     
@@ -57,16 +53,18 @@ public:
     const QString getElementName() override;
 
     // Setting up system data
-    void setSystemData(SystemData data);
+    void setSystemData(std::shared_ptr<SystemData> data);
 
     // Get system data
-    const SystemData* getSystemData();
-    
-protected:
-    // Unsafe editable system data ptr
-    SystemData* unsafeGetSystemData();
+    const SystemData *getSystemData();
+
+    // Edit system data
+    SystemData *editSystemData();
 
 private:
     // Object for system data
-    SystemData _systemData;
+    std::shared_ptr<SystemData> _SystemData;
+
+    // Planets in this system
+    QVector<SystemObject> systemObjects;
 };
