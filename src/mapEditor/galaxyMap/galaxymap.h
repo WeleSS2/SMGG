@@ -57,6 +57,11 @@ public:
         return _currentMap;
     }
 
+    int createMap()
+    { //TODO
+        return 0;
+    }
+
     // Set current map to map from mamento
     int setMap(int id)
     {

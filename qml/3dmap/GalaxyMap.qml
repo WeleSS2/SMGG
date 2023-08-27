@@ -40,10 +40,33 @@ Item {
     }
 
     ListModel {
-        id: starsModel2
+        id: galaxies
         ListElement {
-            posX: 200
-            posY: 0
+            _id: 1
+        }
+        ListElement {
+            _id: 2
+        }
+        ListElement {
+            _id: 3
+        }
+    }
+
+    ListModel {
+        id: stars
+        ListElement {
+            posX: 550
+            posY: 160
+            posZ: 0
+        }
+        ListElement {
+            posX: 550
+            posY: 260
+            posZ: 0
+        }
+        ListElement {
+            posX: 550
+            posY: 360
             posZ: 0
         }
     }
@@ -115,10 +138,38 @@ Item {
         }
 
         Repeater3D {
-            model: [modell1, starsModel2]
-            Repeater3D {
-                model: modell1
-                delegate: starsDelegate
+            model: modell1
+            delegate: starsDelegate
+        }
+
+        Repeater3D {
+            id: galaxiesRepeater
+            model: galaxies
+            delegate: Component {
+                id: galaxiesDelegate
+                Model {
+                    id: modelTest
+                    required property int _id
+                    Repeater3D {
+                        model: stars
+                        delegate: Component {
+                            Model {
+                                id: innerModel
+                                property int galaxyId: modelTest._id
+
+                                position: Qt.vector3d(galaxyId * posX, posY, posZ)
+                                scale: Qt.vector3d(0.1, 0.1, 0.1)
+                                source: "#Sphere"
+                                pickable: true
+
+                                materials: [ DefaultMaterial {
+                                        diffuseColor: "green"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
             }
         }
     }

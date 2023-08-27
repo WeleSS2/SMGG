@@ -1,17 +1,27 @@
 #include "qgalaxymaplist.h"
 
+//TODO
+
 QGalaxyMapList::QGalaxyMapList(QObject *parent)
 {
 
+
+    _galaxiesPtr = std::make_unique<QVector<std::shared_ptr<Galaxy>>>(_currentMap->getMap()->getGalaxies());
 }
 
 int QGalaxyMapList::rowCount(const QModelIndex &parent) const
 {
-    return 0;
+    if (parent.isValid() || !_currentMap.get())
+        return 0;
+
+    return _galaxiesPtr->size();
 }
 
 QVariant QGalaxyMapList::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid() || !_currentMap.get())
+        return 0;
+
     return 0;
 }
 

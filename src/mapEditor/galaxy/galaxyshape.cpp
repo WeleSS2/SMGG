@@ -51,7 +51,6 @@ std::shared_ptr<Galaxy> GalaxyElipse::generate()
         // Add some randomness to the positions
         x += std::uniform_real_distribution<>(-maxStarRange, maxStarRange)(gen);
         y += std::uniform_real_distribution<>(-maxStarRange, maxStarRange)(gen);
-        z += std::uniform_real_distribution<>(-maxStarRange, maxStarRange)(gen);
 
         std::shared_ptr<SystemData> _systemData = std::make_shared<SystemData>();
 

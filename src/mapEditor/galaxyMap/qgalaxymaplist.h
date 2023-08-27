@@ -41,6 +41,8 @@ public:
     void setList(QGalaxyMap *list);
 
 private:
+    std::unique_ptr<QVector<std::shared_ptr<Galaxy>>> _galaxiesPtr;
+
     std::unique_ptr<QGalaxyMap> _currentMap;
 };
 
