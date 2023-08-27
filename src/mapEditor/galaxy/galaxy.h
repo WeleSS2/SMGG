@@ -83,11 +83,13 @@ signals:
     void preSystemRemoved(int index);
     void postSystemRemoved();
 
+    void generateGalaxySignal(int type);
+
     void addSystemSignal();
 
-    void editSystemSignal();
+    void editSystemSignal(int id);
 
-    void removeSystemSignal();
+    void removeSystemSignal(int id);
 
 public slots:
     // Create random system at location edit to made it custom
@@ -100,5 +102,5 @@ public slots:
     Q_INVOKABLE int removeSystem(int systemId);
 
 private:
-    Galaxy _Galaxy;
+    std::shared_ptr<Galaxy> _Galaxy;
 };

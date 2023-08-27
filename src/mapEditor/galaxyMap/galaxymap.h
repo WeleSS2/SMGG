@@ -1,13 +1,13 @@
 #pragma once
-#include "galaxies/galaxy.h"
+#include "../galaxy/galaxy.h"
 #include <vector>
 #include <QVector3D>
 
 // Class for map of galaxies
 class GalaxyMap
 {
-    GalaxyMap();
 public:
+    GalaxyMap();
 
     // Get galaxies
     QVector<std::shared_ptr<Galaxy>> getGalaxies();
@@ -36,6 +36,7 @@ private:
 // Singleton class for all maps.
 class Maps : public GalaxyMap
 {
+protected:
     Maps();
 
     Maps(const Maps&) = delete;
@@ -51,21 +52,22 @@ public:
         return &instance;
     }
 
-    GalaxyMap *GetCurrentMap()
+    std::shared_ptr<GalaxyMap> GetCurrentMap()
     {
-        return _currentMap.get();
+        return _currentMap;
     }
 
-    int setMap(int id);
+    // Set current map to map from mamento
+    int setMap(int id)
+    {
+        if(_mapData.size() >= id){
+            _currentMap = _mapData[id];
+
+            return 1;
+        }
+
+        return 0;
+    }
 
     int removeMap(int id);
-};
-
-//---------------------------------------------------------------------------------
-//  Display for repeaters of current map
-//
-
-class QGalaxyMap : public QAbstractListModel
-{
-
 };
